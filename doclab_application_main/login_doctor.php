@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <title>Doctor Login</title>
+    <style>
+  	#validation_alert
+  	{
+  	color:#FF0000;
+  	}
+  </style>
+</head>
+</html>
+
+<?php
+error_reporting(0);
+session_start();
+include("connection.php");
+?>
+
+<?php
+$count="";
+if(isset($_POST['btn_login']))
+{
+$username=$_POST['txt_username'];
+if($username=="")
+{
+?>
+<style>
+#c1
+{
+border:solid 1px red;
+}
+</style>
+<?php
+$count++;
+}
+
+$password=$_POST['txt_password'];
+if($password=="")
+{
+?>
+<style>
+#c2
+{
+border:solid 1px red;
+}
+</style>
+<?php
+$count++;
+}
+}
+?>
+
+<!--Login-->
+<?php
+if(isset($_POST['btn_login']) && $count==0)
+{
+$select="select * from tbl_doctor where doc_email_id='$username' and doc_password='$password'";
+$query=mysql_query($select);
+$row=mysql_fetch_array($query);
+if($username==$row['doc_email_id'] && $password==$row['doc_password'])
+{
+$_SESSION['firstname']=$row['doc_first_name'];
+$_SESSION['password']=$row['doc_password'];
+$_SESSION['doc_id']=$row['doc_id'];
+?>
+<script>window.location.href="home_doctor.php";</script>
+<?php
+}
+else
+{
+$msg="* Invalid Username or Password";
+}
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <title>Doctor Login</title>
+
+  <!-- ========== Css Files ========== -->
+  <link href="css/root.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="css/custom.css">
+  <style type="text/css">
+    body{background: #CDE7EB;}
+  </style>
+  </head>
+  <body>
+
+    <div class="login-form">
+      <form method="post">
+        <div class="top">
+           <img src="img/images.png" alt="icon" class="doclab_icon">
+          <h1>Doctor</h1>
+          <h4>Log In</h4>
+        </div>
+        <div class="form-area">
+			<div class="group" id="validation_alert">
+			<?php echo $msg; ?>
+           </div>
+          <div class="group">
+            <input type="text" name="txt_username" class="form-control" id="c1" placeholder="Email Address">
+            <i class="fa fa-user"></i>
+          </div>
+          <div class="group">
+            <input type="password" name="txt_password" class="form-control" id="c2" placeholder="Password">
+            <i class="fa fa-key"></i>
+			
+          </div>
+          <div class="checkbox checkbox-primary">
+            <input id="checkbox101" type="checkbox" checked>
+            <label for="checkbox101"> Remember Me</label>
+          </div>
+          <button type="submit" name="btn_login" class="btn btn-default btn-block">LOGIN</button>
+        </div>
+      </form>
+      <div class="footer-links row">
+        <div class="col-xs-6"><a href="add_doctor.php"><i class="fa fa-external-link"></i> Register Now</a></div>
+        <div class="col-xs-6 text-right"><a href="forgotpassword_d.php"><i class="fa fa-lock"></i> Forgot password</a></div>
+      </div>
+    </div>
+
+</body>
+</html>
